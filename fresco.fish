@@ -1,7 +1,6 @@
 set -l fresco_fish_dir $HOME/.config/fish
 not set -q XDG_CONFIG_HOME; and set fresco_fish_dir $XDG_CONFIG_HOME/fish
-not set -q fresco_dir; and set -U fresco_dir $fresco_fish_dir/conf.d/fresco.d
-set -U fresco_plugin_list_path $fresco_dir_path/plugins.fish
+not set -q fresco_plugin_list_path; and set -U fresco_plugin_list_path $fresco_fish_dir/plugins.fish
 not set -q fresco_plugins; and set -U fresco_plugins
 
 function fresco
@@ -24,6 +23,7 @@ function fresco
 end
 
 function __fresco_init
+  set -l fresco_dir (dirname $fresco_plugin_list_path)
   not test -d $fresco_dir; and mkdir -p $fresco_dir
   not test -f $fresco_plugin_list_path; and touch $fresco_plugin_list_path
 
