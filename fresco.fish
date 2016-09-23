@@ -74,6 +74,11 @@ end
 
 function __fresco_remove_plugin
   for plugin in $argv
+    set -l uninstall_fish (__fresco_plugin_path $plugin)/uninstall.fish
+    if test -e $uninstall_fish
+      source $uninstall_fish
+    end
+
     if test -e (__fresco_plugin_path $plugin)
       command rm -rf (__fresco_plugin_path $plugin)
     end
