@@ -123,6 +123,9 @@ function __fresco_load_plugins
   for plugin in $fresco_plugins
     for dir in conf.d completions ''
       for file in (__fresco_plugin_path $plugin)/$dir/*.fish
+        if string match -q 'uninstall.fish' (basename $file)
+          continue
+        end
         source $file
       end
     end
