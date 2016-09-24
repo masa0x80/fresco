@@ -47,10 +47,6 @@ function __fresco_plugin_path -a plugin
   echo (ghq root)/github.com/$plugin
 end
 
-function __fresco_load_plugin -a plugin
-  set fresco_plugins $fresco_plugins $plugin
-end
-
 function __fresco_clone_plugin -a plugin
   if not test -e (__fresco_plugin_path $plugin)
     __fresco_log 'Download ' (__fresco_plugin_path $plugin)
@@ -60,7 +56,7 @@ end
 
 function __fresco_append_plugin_to_list -a plugin
   if not command grep "^fresco $plugin" $fresco_plugin_list_path >/dev/null
-    echo "fresco $plugin" >> $fresco_plugin_list_path
+    echo $plugin >> $fresco_plugin_list_path
   end
 end
 
@@ -84,12 +80,14 @@ function __fresco_get_plugin
       set fresco_plugins $fresco_plugins $plugin
     end
   end
+
+  __fresco_reload_plugins
 end
 
 function __fresco_remove_plugin
   for plugin in $argv
     set -l uninstall_fish (__fresco_plugin_path $plugin)/uninstall.fish
-    if test -e $uninstall_fish
+    if test -f $uninstall_fish
       builtin source $uninstall_fish
     end
 
@@ -98,9 +96,9 @@ function __fresco_remove_plugin
       __fresco_log 'Remove ' (__fresco_plugin_path $plugin)
     end
 
-    if command grep "^fresco $plugin" $fresco_plugin_list_path >/dev/null
+    if command grep "^$plugin" $fresco_plugin_list_path >/dev/null
       string replace '/' '\\/' -- $plugin | read -l escaped_plugin
-      command sed -i -e "/^fresco $escaped_plugin\$/d" $fresco_plugin_list_path
+      command sed -i -e "/^$escaped_plugin\$/d" $fresco_plugin_list_path
     end
   end
 
@@ -131,9 +129,7 @@ function __fresco_list -a prefix
 end
 
 function __fresco_load_plugins
-  if set -q fresco_plugins
-    test -r $fresco_plugin_list_path; and source $fresco_plugin_list_path
-  end
+  __fresco_reload_fresco_plugins_variable
 
   for plugin in $fresco_plugins
     for file in (__fresco_plugin_path $plugin)/functions/*.fish
@@ -142,12 +138,24 @@ function __fresco_load_plugins
   end
 
   for plugin in $fresco_plugins
-    for dir in conf.d completions ''
-      for file in (__fresco_plugin_path $plugin)/$dir/*.fish
-        if string match -q 'uninstall.fish' (basename $file)
+    for file in (__fresco_plugin_path $plugin)/{conf.d/,completions/,}*.fish
+      if string match -q 'uninstall.fish' (basename $file)
+        continue
+      end
+      source $file
+    end
+  end
+end
+
+function __fresco_reload_fresco_plugins_variable
+  if test (count $fresco_plugins) = 0
+    if test -r $fresco_plugin_list_path
+      for repo_name in (cat $fresco_plugin_list_path)
+        set repo_name (string trim $repo_name)
+        if string match -q '' -- $repo_name; or string match -q -r '^#' -- $repo_name
           continue
         end
-        source $file
+        set fresco_plugins $fresco_plugins $repo_name
       end
     end
   end
