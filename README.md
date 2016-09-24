@@ -4,7 +4,7 @@
 
 ## Overview
 
-Fresco is a simple plugin manager for fish-shell.
+`fresco` is a simple plugin manager for fish-shell.
 
 ## Installation
 
@@ -20,7 +20,7 @@ fresco [repos]        -- install plugins
 fresco remove [repos] -- remove plugins
 fresco update [repos] -- update plugins
 fresco list           -- list installed plugins
-fresco reload         -- reload plugins based on `$HOME/.config/fish/conf.d/fresco.d/plugins.fish` file
+fresco reload         -- reload plugins based on `$HOME/.config/fish/plugins.fish` file
 fresco help           -- show this message
 ```
 
