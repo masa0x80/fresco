@@ -2,6 +2,7 @@ set -l fresco_fish_dir $HOME/.config/fish
 not set -q XDG_CONFIG_HOME; and set fresco_fish_dir $XDG_CONFIG_HOME/fish
 not set -q fresco_plugin_list_path; and set -U fresco_plugin_list_path $fresco_fish_dir/plugins.fish
 not set -q fresco_plugins; and set -U fresco_plugins
+not set -q fresco_log_color; and set -U fresco_log_color brown
 
 function fresco
   switch "$argv[1]"
@@ -15,6 +16,8 @@ function fresco
       __fresco_list
     case reload
       __fresco_reload_plugins
+      __fresco_log 'Reloaded plugins:'
+      __fresco_list ' * '
     case help ''
       __fresco_help
     case '*'
@@ -22,10 +25,20 @@ function fresco
   end
 end
 
+function __fresco_log
+  set_color $fresco_log_color
+  echo -s $argv
+  set_color normal
+end
+
 function __fresco_init
   set -l fresco_dir (dirname $fresco_plugin_list_path)
   not test -d $fresco_dir; and mkdir -p $fresco_dir
-  not test -f $fresco_plugin_list_path; and touch $fresco_plugin_list_path
+  if not test -f $fresco_plugin_list_path
+    __fresco_log 'Initialize fresco...'
+    __fresco_log "  Create $fresco_plugin_list_path"
+    touch $fresco_plugin_list_path
+  end
 
   functions -e __fresco_init
 end
@@ -40,7 +53,8 @@ end
 
 function __fresco_clone_plugin -a plugin
   if not test -e (__fresco_plugin_path $plugin)
-    ghq get $plugin
+    __fresco_log 'Download ' (__fresco_plugin_path $plugin)
+    ghq get $plugin ^/dev/null
   end
 end
 
@@ -76,11 +90,12 @@ function __fresco_remove_plugin
   for plugin in $argv
     set -l uninstall_fish (__fresco_plugin_path $plugin)/uninstall.fish
     if test -e $uninstall_fish
-      source $uninstall_fish
+      builtin source $uninstall_fish
     end
 
     if test -e (__fresco_plugin_path $plugin)
       command rm -rf (__fresco_plugin_path $plugin)
+      __fresco_log 'Remove ' (__fresco_plugin_path $plugin)
     end
 
     if command grep "^fresco $plugin" $fresco_plugin_list_path >/dev/null
@@ -95,22 +110,23 @@ end
 function __fresco_update_plugin
   for plugin in $argv
     if not test -e (__fresco_plugin_path $plugin)
-      echo 'not exist'
+      __fresco_log 'not exist'
       return 1
     end
 
+    __fresco_log "Update " (__fresco_plugin_path $plugin)
     pushd (pwd)
-    cd (__fresco_plugin_path $plugin)
-    git pull origin master
+    builtin cd (__fresco_plugin_path $plugin)
+    command git pull origin master ^/dev/null
     popd
   end
 
   __fresco_reload_plugins
 end
 
-function __fresco_list
+function __fresco_list -a prefix
   for plugin in $fresco_plugins
-    echo $plugin
+    echo -s $prefix $plugin
   end
 end
 
