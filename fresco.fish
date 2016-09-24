@@ -51,7 +51,14 @@ function __fresco_clone_plugin -a plugin
   if not test -e (__fresco_plugin_path $plugin)
     __fresco_log 'Download ' (__fresco_plugin_path $plugin)
     ghq get $plugin ^/dev/null
+    set ghq_status $status
+    if test $ghq_status != 0
+      command rm -rf (__fresco_plugin_path $plugin)
+      __fresco_log 'ERROR: invalid repository name'
+    end
+    return $ghq_status
   end
+  return 0
 end
 
 function __fresco_append_plugin_to_list -a plugin
@@ -63,21 +70,23 @@ end
 function __fresco_resolve_dependency -a plugin
   if test -f (__fresco_plugin_path $plugin)/fishfile
     for name in (cat (__fresco_plugin_path $plugin)/fishfile)
-      __fresco_clone_plugin $name
-      __fresco_resolve_dependency $name
-      __fresco_append_plugin_to_list $name
+      if __fresco_clone_plugin $name
+        __fresco_resolve_dependency $name
+        __fresco_append_plugin_to_list $name
+      end
     end
   end
 end
 
 function __fresco_get_plugin
   for plugin in $argv
-    __fresco_clone_plugin $plugin
-    __fresco_resolve_dependency $plugin
-    __fresco_append_plugin_to_list $plugin
+    if __fresco_clone_plugin $plugin
+      __fresco_resolve_dependency $plugin
+      __fresco_append_plugin_to_list $plugin
 
-    if not contains $plugin $fresco_plugins
-      set fresco_plugins $fresco_plugins $plugin
+      if not contains $plugin $fresco_plugins
+        set fresco_plugins $fresco_plugins $plugin
+      end
     end
   end
 
@@ -86,6 +95,11 @@ end
 
 function __fresco_remove_plugin
   for plugin in $argv
+    if not contains $plugin $fresco_plugins
+      __fresco_log 'ERROR: invalid repository name'
+      continue
+    end
+
     set -l uninstall_fish (__fresco_plugin_path $plugin)/uninstall.fish
     if test -f $uninstall_fish
       builtin source $uninstall_fish
@@ -107,9 +121,9 @@ end
 
 function __fresco_update_plugin
   for plugin in $argv
-    if not test -e (__fresco_plugin_path $plugin)
-      __fresco_log 'not exist'
-      return 1
+    if not contains $plugin $fresco_plugins; or not test -e (__fresco_plugin_path $plugin)
+      __fresco_log 'ERROR: invalid repository name'
+      continue
     end
 
     __fresco_log "Update " (__fresco_plugin_path $plugin)
