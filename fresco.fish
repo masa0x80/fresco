@@ -62,7 +62,7 @@ function __fresco_clone_plugin -a plugin
 end
 
 function __fresco_append_plugin_to_list -a plugin
-  if not command grep "^fresco $plugin" $fresco_plugin_list_path >/dev/null
+  if not command grep "^$plugin\$" $fresco_plugin_list_path >/dev/null
     echo $plugin >> $fresco_plugin_list_path
   end
 end
