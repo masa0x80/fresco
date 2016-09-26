@@ -7,11 +7,11 @@ not set -q fresco_log_color; and set -U fresco_log_color brown
 function fresco
   switch "$argv[1]"
     case get
-      __fresco_get_plugin (string split $argv)
+      __fresco_get_plugin $argv[2..-1]
     case remove
-      __fresco_remove_plugin (string split $argv)
+      __fresco_remove_plugin $argv[2..-1]
     case update
-      __fresco_update_plugin (string split $argv)
+      __fresco_update_plugin $argv[2..-1]
     case list
       __fresco_list
     case reload
@@ -101,20 +101,29 @@ function __fresco_get_plugin
 end
 
 function __fresco_remove_plugin
-  for plugin in $argv
+  set -l force_option false
+  contains -- $argv[1] --force -f; and set force_option true
+
+  set -l plugins $argv[1..-1]
+  eval $force_option; and set plugins $argv[2..-1]
+
+  for plugin in $plugins
     if not contains $plugin $fresco_plugins
       __fresco_log 'ERROR: invalid repository name'
       continue
     end
 
-    set -l uninstall_fish (__fresco_plugin_path $plugin)/uninstall.fish
-    if test -f $uninstall_fish
-      builtin source $uninstall_fish
+    for uninstall_fish in (__fresco_plugin_path $plugin)/{functions/,}uninstall.fish
+      if test -f $uninstall_fish
+        builtin source $uninstall_fish
+      end
     end
 
-    if test -e (__fresco_plugin_path $plugin)
-      command rm -rf (__fresco_plugin_path $plugin)
-      __fresco_log 'Remove ' (__fresco_plugin_path $plugin)
+    if eval $force_option
+      if test -e (__fresco_plugin_path $plugin)
+        command rm -rf (__fresco_plugin_path $plugin)
+        __fresco_log 'Remove ' (__fresco_plugin_path $plugin)
+      end
     end
 
     if command grep "^$plugin" $fresco_plugin_list_path >/dev/null
@@ -122,6 +131,7 @@ function __fresco_remove_plugin
       set -l fresco_tmp_file /tmp/fresco-(random)
       command sed -e "/^$escaped_plugin\$/d" -- $fresco_plugin_list_path > $fresco_tmp_file
       command mv $fresco_tmp_file $fresco_plugin_list_path
+      __fresco_log 'Disable ' $plugin
     end
   end
 
