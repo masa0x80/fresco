@@ -129,7 +129,10 @@ function __fresco_remove_plugin
 end
 
 function __fresco_update_plugin
-  for plugin in $argv
+  set -l plugins $argv
+  test (count $plugins) = 0; and set plugins $fresco_plugins
+
+  for plugin in $plugins
     if not contains $plugin $fresco_plugins; or not test -e (__fresco_plugin_path $plugin)
       __fresco_log 'ERROR: invalid repository name'
       continue
