@@ -1,6 +1,7 @@
-set -l fresco_fish_dir $HOME/.config/fish
-not set -q XDG_CONFIG_HOME; and set fresco_fish_dir $XDG_CONFIG_HOME/fish
-not set -q fresco_plugin_list_path; and set -U fresco_plugin_list_path $fresco_fish_dir/plugins.fish
+if not set -q fresco_plugin_list_path
+  set -U fresco_plugin_list_path "$HOME/.config/fish/plugins.fish"
+  set -q XDG_CONFIG_HOME; and set fresco_plugin_list_path "$XDG_CONFIG_HOME/fish/plugins.fish"
+end
 not set -q fresco_plugins; and set -U fresco_plugins
 not set -q fresco_log_color; and set -U fresco_log_color brown
 
@@ -68,24 +69,24 @@ function __fresco_clone_plugin -a plugin
   return 0
 end
 
-function __fresco_append_plugin_to_list -a plugin
-  if not command grep "^$plugin\$" $fresco_plugin_list_path >/dev/null
-    echo $plugin >> $fresco_plugin_list_path
+function __fresco_get_plugin
+  function __fresco_append_plugin_to_list -a plugin
+    if not command grep "^$plugin\$" $fresco_plugin_list_path >/dev/null
+      echo $plugin >> $fresco_plugin_list_path
+    end
   end
-end
 
-function __fresco_resolve_dependency -a plugin
-  if test -f (__fresco_plugin_path $plugin)/fishfile
-    for name in (cat (__fresco_plugin_path $plugin)/fishfile)
-      if __fresco_clone_plugin $name
-        __fresco_resolve_dependency $name
-        __fresco_append_plugin_to_list $name
+  function __fresco_resolve_dependency -a plugin
+    if test -f (__fresco_plugin_path $plugin)/fishfile
+      for name in (cat (__fresco_plugin_path $plugin)/fishfile)
+        if __fresco_clone_plugin $name
+          __fresco_resolve_dependency $name
+          __fresco_append_plugin_to_list $name
+        end
       end
     end
   end
-end
 
-function __fresco_get_plugin
   for plugin in $argv
     if __fresco_clone_plugin $plugin
       __fresco_resolve_dependency $plugin
@@ -165,6 +166,19 @@ function __fresco_list -a prefix
 end
 
 function __fresco_load_plugins
+  function __fresco_reload_fresco_plugins_variable
+    if test (count $fresco_plugins) = 0
+      if test -r $fresco_plugin_list_path
+        for repo_name in (cat $fresco_plugin_list_path)
+          set repo_name (string trim $repo_name)
+          if string match -q '' -- $repo_name; or string match -q -r '^#' -- $repo_name
+            continue
+          end
+          set fresco_plugins $fresco_plugins $repo_name
+        end
+      end
+    end
+  end
   __fresco_reload_fresco_plugins_variable
 
   for plugin in $fresco_plugins
@@ -179,20 +193,6 @@ function __fresco_load_plugins
         continue
       end
       source $file
-    end
-  end
-end
-
-function __fresco_reload_fresco_plugins_variable
-  if test (count $fresco_plugins) = 0
-    if test -r $fresco_plugin_list_path
-      for repo_name in (cat $fresco_plugin_list_path)
-        set repo_name (string trim $repo_name)
-        if string match -q '' -- $repo_name; or string match -q -r '^#' -- $repo_name
-          continue
-        end
-        set fresco_plugins $fresco_plugins $repo_name
-      end
     end
   end
 end
