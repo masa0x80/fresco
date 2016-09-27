@@ -140,20 +140,32 @@ function __fresco_remove_plugin
 end
 
 function __fresco_update_plugin
-  set -l plugins $argv
-  test (count $plugins) = 0; and set plugins $fresco_plugins
-
-  for plugin in $plugins
-    if not contains $plugin $fresco_plugins; or not test -e (__fresco_plugin_path $plugin)
-      __fresco_log 'ERROR: invalid repository name'
-      continue
-    end
-
-    __fresco_log "Update " (__fresco_plugin_path $plugin)
+  function __fresco_git_update -a plugin
+    __fresco_log "Update " $plugin
     pushd (pwd)
     builtin cd (__fresco_plugin_path $plugin)
     command git pull origin master ^/dev/null
     popd
+  end
+
+  set -l self_option false
+  test $argv[1] = --self; and set self_option true
+
+  if eval $self_option
+    __fresco_git_update masa0x80/fresco
+    return 0
+  end
+
+  set -l plugins $argv
+  test (count $plugins) = 0; and set plugins $fresco_plugins
+
+  for plugin in $plugins
+    if not contains -- $plugin $fresco_plugins; or not test -e (__fresco_plugin_path $plugin)
+      __fresco_log 'ERROR: invalid repository name'
+      continue
+    end
+
+    __fresco_git_update $plugin
   end
 
   __fresco_reload_plugins
