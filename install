@@ -1,0 +1,11 @@
+if type -qa ghq
+  set -l fresco_fish_path "$HOME/.config/fish/conf.d/fresco.fish"
+  set -q XDG_CONFIG_HOME; and set fresco_fish_path "$XDG_CONFIG_HOME/fish/conf.d/fresco.fish"
+  ghq get masa0x80/fresco
+  ln -s (ghq root)/github.com/masa0x80/fresco/fresco.fish $fresco_fish_path
+  exec fish -l
+else
+  set_color $fresco_color_error
+  echo 'ghq: command not found'
+  set_color normal
+end
