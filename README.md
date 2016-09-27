@@ -9,8 +9,7 @@
 ## Installation
 
 ```
-$ curl -Lo $HOME/.config/fish/conf.d/fresco.fish --create-dirs https://raw.githubusercontent.com/masa0x80/fresco/master/fresco.fish
-$ exec fish -l
+$ curl https://raw.githubusercontent.com/masa0x80/fresco/master/install | fish
 ```
 
 ## Usage
@@ -24,10 +23,40 @@ fresco reload         -- reload plugins based on `$HOME/.config/fish/plugins.fis
 fresco help           -- show this message
 ```
 
-**Example**
+**Example: install a plugin**
 
 To install `mono`, execute the following command:
 
 ```
 $ fresco fisherman/mono
+```
+
+**Example: update a plugin**
+
+To update `mono`, execute the following command:
+
+```
+$ fresco update fisherman/mono
+```
+
+**Example: remove a plugin**
+
+Make `mono` disable, execute the following command:
+
+```
+$ fresco remove fisherman/mono
+```
+
+Make `mono` disable and remove `mono` repository, execute the following command:
+
+```
+$ fresco remove --force fisherman/mono
+```
+
+**Update `fresco`**
+
+To update `fresco` itself, execute the following command:
+
+```
+fresco update --self
 ```
