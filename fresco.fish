@@ -8,11 +8,11 @@ not set -q fresco_log_color; and set -U fresco_log_color brown
 function fresco
   switch "$argv[1]"
     case get
-      __fresco_get_plugin $argv[2..-1]
+      __fresco_get_plugin (string split -- $argv)
     case remove
-      __fresco_remove_plugin $argv[2..-1]
+      __fresco_remove_plugin (string split -- $argv)
     case update
-      __fresco_update_plugin $argv[2..-1]
+      __fresco_update_plugin (string split -- $argv)
     case list
       __fresco_list
     case reload
@@ -21,7 +21,7 @@ function fresco
       __fresco_list ' * '
     case help ''
       __fresco_help
-    case '*'
+    case \*
       __fresco_get_plugin $argv
   end
 end
@@ -58,15 +58,14 @@ end
 function __fresco_clone_plugin -a plugin
   if not test -e (__fresco_plugin_path $plugin)
     __fresco_log 'Download ' (__fresco_plugin_path $plugin)
-    ghq get $plugin ^/dev/null
+    ghq get $plugin >/dev/null ^/dev/null
     set ghq_status $status
     if test $ghq_status != 0
       command rm -rf (__fresco_plugin_path $plugin)
-      __fresco_log 'ERROR: invalid repository name'
+      __fresco_log 'ERROR: invalid plugin name'
     end
     return $ghq_status
   end
-  return 0
 end
 
 function __fresco_get_plugin
@@ -93,6 +92,7 @@ function __fresco_get_plugin
       __fresco_append_plugin_to_list $plugin
 
       if not contains $plugin $fresco_plugins
+        __fresco_log "Enable $plugin"
         set fresco_plugins $fresco_plugins $plugin
       end
     end
@@ -103,14 +103,21 @@ end
 
 function __fresco_remove_plugin
   set -l force_option false
-  contains -- $argv[1] --force -f; and set force_option true
+
+  switch "$argv[1]"
+    case ''
+      __fresco_log 'ERROR: specify at least one plugin name'
+      return 1
+    case -f --force
+      set force_option true
+  end
 
   set -l plugins $argv[1..-1]
   eval $force_option; and set plugins $argv[2..-1]
 
   for plugin in $plugins
     if not contains $plugin $fresco_plugins
-      __fresco_log 'ERROR: invalid repository name'
+      __fresco_log 'ERROR: invalid plugin name'
       continue
     end
 
@@ -144,24 +151,26 @@ function __fresco_update_plugin
     __fresco_log "Update " $plugin
     pushd (pwd)
     builtin cd (__fresco_plugin_path $plugin)
-    command git pull origin master ^/dev/null
+    command git pull origin master >/dev/null ^/dev/null
     popd
   end
 
-  set -l self_option false
-  test $argv[1] = --self; and set self_option true
-
-  if eval $self_option
-    __fresco_git_update masa0x80/fresco
-    return 0
-  end
-
   set -l plugins $argv
-  test (count $plugins) = 0; and set plugins $fresco_plugins
+
+  switch "$argv[1]"
+    case ''
+      __fresco_log 'ERROR: specify at least one plugin name'
+      return 1
+    case --self
+      __fresco_git_update masa0x80/fresco
+      return 0
+    case --all
+      set plugins $fresco_plugins
+  end
 
   for plugin in $plugins
     if not contains -- $plugin $fresco_plugins; or not test -e (__fresco_plugin_path $plugin)
-      __fresco_log 'ERROR: invalid repository name'
+      __fresco_log 'ERROR: invalid plugin name'
       continue
     end
 
