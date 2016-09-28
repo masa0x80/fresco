@@ -8,7 +8,7 @@ not set -q fresco_log_color; and set -U fresco_log_color brown
 function fresco
   switch "$argv[1]"
     case get
-      __fresco_get_plugin (string split -- $argv)
+      __fresco_get_plugin_async (string split -- $argv)
     case remove
       __fresco_remove_plugin (string split -- $argv)
     case update
@@ -22,7 +22,7 @@ function fresco
     case help ''
       __fresco_help
     case \*
-      __fresco_get_plugin $argv
+      __fresco_get_plugin_async $argv
   end
 end
 
@@ -68,13 +68,7 @@ function __fresco_clone_plugin -a plugin
   end
 end
 
-function __fresco_get_plugin
-  function __fresco_append_plugin_to_list -a plugin
-    if not command grep "^$plugin\$" $fresco_plugin_list_path >/dev/null
-      echo $plugin >> $fresco_plugin_list_path
-    end
-  end
-
+function __fresco_get_plugin -a plugin
   function __fresco_resolve_dependency -a plugin
     if test -f (__fresco_plugin_path $plugin)/fishfile
       for name in (cat (__fresco_plugin_path $plugin)/fishfile)
@@ -86,19 +80,43 @@ function __fresco_get_plugin
     end
   end
 
-  for plugin in $argv
-    if __fresco_clone_plugin $plugin
-      __fresco_resolve_dependency $plugin
-      __fresco_append_plugin_to_list $plugin
-
-      if not contains $plugin $fresco_plugins
-        __fresco_log "Enable $plugin"
-        set fresco_plugins $fresco_plugins $plugin
-      end
+  function __fresco_append_plugin_to_list -a plugin
+    if not command grep "^$plugin\$" $fresco_plugin_list_path >/dev/null
+      echo $plugin >> $fresco_plugin_list_path
     end
   end
 
-  __fresco_reload_plugins
+  if __fresco_clone_plugin $plugin
+    __fresco_resolve_dependency $plugin
+    __fresco_append_plugin_to_list $plugin
+
+    if not contains $plugin $fresco_plugins
+      __fresco_log "Enable $plugin"
+      set fresco_plugins $fresco_plugins $plugin
+    end
+  end
+  set fresco_job_count (math $fresco_job_count - 1)
+end
+
+function __fresco_get_plugin_async
+  not set -q fresco_job_count; and set -U fresco_job_count 0
+  for plugin in $argv
+    set fresco_job_count (math $fresco_job_count + 1)
+    fish -c "__fresco_get_plugin $plugin" &
+  end
+
+  while true
+    for c in ⣾ ⣽ ⣻ ⢿ ⡿ ⣟ ⣯ ⣷
+      echo -en "  $c\r"
+      sleep 0.1
+    end
+
+    if test "$fresco_job_count" -le 0
+      set -e fresco_job_count
+      __fresco_reload_plugins
+      break
+    end
+  end
 end
 
 function __fresco_remove_plugin
