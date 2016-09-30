@@ -4,6 +4,7 @@ if type -qa ghq
   ghq get masa0x80/fresco
   set_color $fish_color_user
   echo "Create $fresco_fish_path"
+  mkdir -p (dirname $fresco_fish_path)
   set_color normal
   echo 'source (ghq root)/github.com/masa0x80/fresco/fresco.fish' > $fresco_fish_path
   exec fish -l
