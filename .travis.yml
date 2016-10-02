@@ -10,7 +10,9 @@ install:
   - go get github.com/motemen/ghq
   - cat install | fish
 script:
+  - fish -c 'fresco help'
   - fish -c 'fresco oh-my-fish/plugin-osx'
+  - fish -c 'fresco reload'
   - fish -c 'type -qa itunes'
   - fish -c 'fresco fisherman/mono'
   - fish -c 'fresco update fisherman/mono'
