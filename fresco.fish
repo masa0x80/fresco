@@ -1,4 +1,4 @@
-set -x FRESCO_VERSION 0.1.0
+set -x FRESCO_VERSION 0.1.1
 
 if not set -q fresco_plugin_list_path
   set -U fresco_plugin_list_path "$HOME/.config/fish/plugins.fish"
@@ -226,15 +226,14 @@ function __fresco.load_plugins
 
   for plugin in $fresco_plugins
     for file in (__fresco.plugin_path $plugin)/functions/*.fish
+      string match -q -- 'uninstall.fish' (basename $file); and continue
       source $file
     end
   end
 
   for plugin in $fresco_plugins
     for file in (__fresco.plugin_path $plugin)/{conf.d/,completions/,}*.fish
-      if string match -q 'uninstall.fish' (basename $file)
-        continue
-      end
+      string match -q -- 'uninstall.fish' (basename $file); and continue
       source $file
     end
   end
