@@ -20,7 +20,8 @@ fresco remove [repos] -- remove plugins
 fresco update [repos] -- update plugins
 fresco list           -- list installed plugins
 fresco reload         -- reload plugins based on `$HOME/.config/fish/plugins.fish` file
-fresco help           -- show this message
+fresco help           -- display the help message
+fresco --version      -- display the version of fresco
 ```
 
 **Example: install a plugin**

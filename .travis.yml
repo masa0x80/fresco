@@ -8,8 +8,11 @@ before_install:
   - sudo apt-get -y install fish
 install:
   - go get github.com/motemen/ghq
-  - cat install | fish
+  - export FISH_CONF_DIR="$HOME/.config/fish/conf.d/"
+  - mkdir -p $FISH_CONF_DIR
+  - mv fresco.fish $FISH_CONF_DIR
 script:
+  - fish -c 'fresco --version'
   - fish -c 'fresco help'
   - fish -c 'fresco oh-my-fish/plugin-osx'
   - fish -c 'fresco reload'

@@ -1,3 +1,5 @@
+set -x FRESCO_VERSION 0.1.0
+
 if not set -q fresco_plugin_list_path
   set -U fresco_plugin_list_path "$HOME/.config/fish/plugins.fish"
   set -q XDG_CONFIG_HOME; and set fresco_plugin_list_path "$XDG_CONFIG_HOME/fish/plugins.fish"
@@ -21,6 +23,8 @@ function fresco
       __fresco.list ' * '
     case help ''
       __fresco.help
+    case --version
+      __fresco.version
     case \*
       __fresco.get_plugin_async $argv
   end
@@ -90,7 +94,7 @@ function __fresco.get_plugin -a plugin
     __fresco.resolve_dependency $plugin
     __fresco.append_plugin_to_list $plugin
 
-    if not contains $plugin $fresco_plugins
+    if not contains -- $plugin $fresco_plugins
       __fresco.log "Enable $plugin"
       set fresco_plugins $fresco_plugins $plugin
     end
@@ -134,7 +138,7 @@ function __fresco.remove_plugin
   eval $force_option; and set plugins $argv[2..-1]
 
   for plugin in $plugins
-    if not contains $plugin $fresco_plugins
+    if not contains -- $plugin $fresco_plugins
       __fresco.log 'ERROR: invalid plugin name'
       continue
     end
@@ -209,7 +213,7 @@ function __fresco.load_plugins
     if test (count $fresco_plugins) = 0
       if test -r $fresco_plugin_list_path
         for repo_name in (cat $fresco_plugin_list_path)
-          set repo_name (string trim $repo_name)
+          set repo_name (string trim -- $repo_name)
           if string match -q '' -- $repo_name; or string match -q -r '^#' -- $repo_name
             continue
           end
@@ -241,13 +245,18 @@ function __fresco.reload_plugins
   __fresco.load_plugins
 end
 
+function __fresco.version
+  echo $FRESCO_VERSION
+end
+
 function __fresco.help
   echo 'fresco [repos]        -- install plugins'
   echo 'fresco remove [repos] -- remove plugins'
   echo 'fresco update [repos] -- update plugins'
   echo 'fresco list           -- list installed packages'
   echo 'fresco reload         -- reload plugins based on `fresco.d/plugins.fish` file'
-  echo 'fresco help           -- show this message'
+  echo 'fresco help           -- display the help message'
+  echo 'fresco --version      -- display the version of fresco'
 end
 
 __fresco.init
