@@ -1,4 +1,4 @@
-set -x FRESCO_VERSION 0.1.1
+set -x FRESCO_VERSION 0.1.2
 
 if not set -q fresco_plugin_list_path
   set -U fresco_plugin_list_path "$HOME/.config/fish/plugins.fish"
@@ -185,6 +185,7 @@ function __fresco.update_plugin
       return 1
     case --self
       __fresco.git_update masa0x80/fresco
+      source (ghq root)/github.com/masa0x80/fresco/fresco.fish
       return 0
     case --all
       set plugins $fresco_plugins
