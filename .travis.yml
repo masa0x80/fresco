@@ -8,9 +8,12 @@ before_install:
   - sudo apt-get -y install fish
 install:
   - go get github.com/motemen/ghq
+  - export FRESCO_DIR=$(ghq root)/github.com/masa0x80/fresco
+  - mkdir -p $FRESCO_DIR
+  - mv * $FRESCO_DIR
   - export FISH_CONF_DIR="$HOME/.config/fish/conf.d/"
   - mkdir -p $FISH_CONF_DIR
-  - mv fresco.fish $FISH_CONF_DIR
+  - echo 'source (ghq root)/github.com/masa0x80/fresco/fresco.fish' > ${FISH_CONF_DIR}/fresco.fish
 script:
   - fish -c 'fresco --version'
   - fish -c 'fresco help'
