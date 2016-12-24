@@ -10,6 +10,7 @@
 
 ```
 $ curl https://raw.githubusercontent.com/masa0x80/fresco/master/install | fish
+$ exec fish -l
 ```
 
 ## Usage
