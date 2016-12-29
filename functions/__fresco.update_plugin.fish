@@ -3,7 +3,7 @@ function __fresco.update_plugin
     __fresco.log "Update " $plugin
     pushd (pwd)
     builtin cd (__fresco.plugin_path $plugin)
-    command git pull origin master >/dev/null ^/dev/null
+    command git pull origin master ^/dev/null
     popd
   end
 
