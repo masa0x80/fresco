@@ -6,7 +6,7 @@ if type -qa ghq
   echo "Create $fresco_fish_path"
   mkdir -p (dirname $fresco_fish_path)
   set_color normal
-  echo 'source (ghq root)/github.com/masa0x80/fresco/fresco.fish' > $fresco_fish_path
+  echo -e 'if type -qa ghq\n  set -l fresco_file (ghq root)/github.com/masa0x80/fresco/fresco.fish\n  if test -r $fresco_file\n    source $fresco_file\n  else\n    ghq get masa0x80/fresco\n  end\nend' > $fresco_fish_path
 else
   set_color $fresco_color_error
   echo 'ghq: command not found'
