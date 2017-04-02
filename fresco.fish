@@ -1,4 +1,4 @@
-set -x FRESCO_VERSION 0.1.3
+set -x FRESCO_VERSION 0.2.0
 
 if not set -q fresco_plugin_list_path
   set -U fresco_plugin_list_path "$HOME/.config/fish/plugins.fish"
@@ -7,7 +7,7 @@ end
 not set -q fresco_plugins; and set -U fresco_plugins
 not set -q fresco_log_color; and set -U fresco_log_color brown
 
-for file in (ghq root)/github.com/masa0x80/fresco/functions/*.fish
+for file in (ghq root)/github.com/masa0x80/fresco/{functions,completions}/*.fish
   source $file
 end
 
