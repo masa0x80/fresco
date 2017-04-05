@@ -14,17 +14,17 @@ function __fresco.load_plugins
   end
   __fresco.reload_fresco_plugins_variable
 
-  for plugin in $fresco_plugins
-    for file in (__fresco.plugin_path $plugin)/functions/*.fish
-      string match -q -- 'uninstall.fish' (basename $file); and continue
-      source $file
+  function __fresco.cache_fresco_plugins
+    command mkdir -p (dirname $fresco_cache)
+    echo -n > $fresco_cache
+    for plugin in $fresco_plugins
+      for file in (__fresco.plugin_path $plugin)/{functions/,conf.d/,completions/,}*.fish
+        string match -q -- 'uninstall.fish' (basename $file); and continue
+        command cat $file >> $fresco_cache
+      end
     end
   end
+  test -e $fresco_cache; or __fresco.cache_fresco_plugins
 
-  for plugin in $fresco_plugins
-    for file in (__fresco.plugin_path $plugin)/{conf.d/,completions/,}*.fish
-      string match -q -- 'uninstall.fish' (basename $file); and continue
-      source $file
-    end
-  end
+  source $fresco_cache
 end
