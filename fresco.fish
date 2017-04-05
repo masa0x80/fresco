@@ -1,4 +1,4 @@
-set -x FRESCO_VERSION 0.2.0
+set -x FRESCO_VERSION 0.3.0
 
 if not set -q fresco_plugin_list_path
   set -U fresco_plugin_list_path "$HOME/.config/fish/plugins.fish"
