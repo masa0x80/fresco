@@ -1,6 +1,11 @@
 function __fresco.get_plugin_async
   not set -q fresco_job_count; and set -U fresco_job_count 0
   for plugin in $argv
+    if string match -qr -- '^\-.*' $plugin
+      __fresco.log 'ERROR: `' $plugin '` is an invalid argument.'
+      continue
+    end
+
     if not contains -- $plugin $fresco_plugins
       set fresco_job_count (math $fresco_job_count + 1)
       fish -c "__fresco.get_plugin $plugin" &
