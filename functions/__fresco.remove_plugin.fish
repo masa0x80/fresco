@@ -10,8 +10,9 @@ function __fresco.remove_plugin
     end
 
     set -l plugins $argv[1..-1]
-    eval $force_option
-    and set plugins $argv[2..-1]
+    if eval $force_option
+        set plugins $argv[2..-1]
+    end
 
     for plugin in $plugins
         if not contains -- $plugin $fresco_plugins

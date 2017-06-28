@@ -1,7 +1,8 @@
 function __fresco.init
     set -l fresco_dir (dirname $fresco_plugin_list_path)
-    not test -d $fresco_dir
-    and mkdir -p $fresco_dir
+    if not test -d $fresco_dir
+        mkdir -p $fresco_dir
+    end
     if not test -f $fresco_plugin_list_path
         __fresco.log 'Initialize fresco...'
         __fresco.log "  Create $fresco_plugin_list_path"

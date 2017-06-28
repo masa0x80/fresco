@@ -20,14 +20,16 @@ function __fresco.load_plugins
         echo -n >$fresco_cache
         for plugin in $fresco_plugins
             for file in (__fresco.plugin_path $plugin)/{functions/,conf.d/,completions/,}*.fish
-                string match -q -- 'uninstall.fish' (basename $file)
-                and continue
+                if string match -q -- 'uninstall.fish' (basename $file)
+                    continue
+                end
                 command cat $file >>$fresco_cache
             end
         end
     end
-    test -e $fresco_cache
-    or __fresco.cache_fresco_plugins
+    if not test -e $fresco_cache
+        __fresco.cache_fresco_plugins
+    end
 
     source $fresco_cache
 end

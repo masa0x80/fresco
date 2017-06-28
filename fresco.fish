@@ -2,15 +2,19 @@ set -x FRESCO_VERSION 0.3.1
 
 if not set -q fresco_plugin_list_path
     set -U fresco_plugin_list_path "$HOME/.config/fish/plugins.fish"
-    set -q XDG_CONFIG_HOME
-    and set fresco_plugin_list_path "$XDG_CONFIG_HOME/fish/plugins.fish"
+    if set -q XDG_CONFIG_HOME
+        set fresco_plugin_list_path "$XDG_CONFIG_HOME/fish/plugins.fish"
+    end
 end
-not set -q fresco_plugins
-and set -U fresco_plugins
-not set -q fresco_log_color
-and set -U fresco_log_color brown
-not set -q fresco_cache
-and set -U fresco_cache "$HOME/.cache/fresco/plugin_cache.fish"
+if not set -q fresco_plugins
+    set -U fresco_plugins
+end
+if not set -q fresco_log_color
+    set -U fresco_log_color brown
+end
+if not set -q fresco_cache
+    set -U fresco_cache "$HOME/.cache/fresco/plugin_cache.fish"
+end
 
 for file in (ghq root)/github.com/masa0x80/fresco/{functions,completions}/*.fish
     source $file
