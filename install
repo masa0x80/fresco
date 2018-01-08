@@ -56,7 +56,7 @@ if test $ghq_not_found = 1
     set -l fresco_file_path $fresco_base_path/fresco.fish
     echo "set -l fresco_file $fresco_base_path/fresco.fish" > $fresco_fish_path
     echo 'if test -r $fresco_file' >> $fresco_fish_path
-    echo "    set -l fresco_ghq $fresco_base_path/bin/ghq" >> $fresco_fish_path
+    echo "    set -gx fresco_ghq $fresco_base_path/bin/ghq" >> $fresco_fish_path
     echo '    source $fresco_file' >> $fresco_fish_path
 else
     echo 'if type -qa ghq' > $fresco_fish_path
