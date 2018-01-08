@@ -1,4 +1,4 @@
-set -x FRESCO_VERSION 0.3.1
+set -x FRESCO_VERSION 0.3.2
 
 function __fresco.ghq
     if type -qa ghq
