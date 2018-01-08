@@ -1,14 +1,69 @@
-if type -qa ghq
-  set -l fresco_fish_path "$HOME/.config/fish/conf.d/fresco.fish"
-  set -q XDG_CONFIG_HOME; and set fresco_fish_path "$XDG_CONFIG_HOME/fish/conf.d/fresco.fish"
-  ghq get masa0x80/fresco
-  set_color $fish_color_user
-  echo "Create $fresco_fish_path"
-  mkdir -p (dirname $fresco_fish_path)
+# vi: set ft=fish
+
+type -qa unzip
+if test $status != 0
+  set_color $fish_color_error
+  echo 'ERROR: `unzip` command not found'
   set_color normal
-  echo -e 'if type -qa ghq\n    set -l fresco_file (ghq root)/github.com/masa0x80/fresco/fresco.fish\n    if test -r $fresco_file\n        source $fresco_file\n    else\n        ghq get masa0x80/fresco\n    end\nend' > $fresco_fish_path
-else
-  set_color $fresco_color_error
-  echo 'ghq: command not found'
-  set_color normal
+  exit 1
 end
+
+type -qa git
+if test $status != 0
+  set_color $fish_color_error
+  echo 'ERROR: `git` command not found'
+  set_color normal
+  exit 1
+end
+
+set -l temp_dir (mktemp -d)
+set -l ghq_not_found 0
+
+# NOTE: Install ghq if ghq does not exist
+type -qa ghq
+if test $status != 0
+    set ghq_not_found 1
+    set -l ghq_version 'v0.8.0'
+    set -l os_type (uname | tr '[:upper:]' '[:lower:]')
+    set -l arch amd_64
+    if test (getconf LONG_BIT) != 32
+      set arch 386
+    end
+    curl -Lo $temp_dir/ghq.zip (echo -s -n https://github.com/motemen/ghq/releases/download/ $ghq_version /ghq_ $os_type _ $arch .zip)
+    unzip $temp_dir/ghq.zip -d $temp_dir/bin
+    set -gx fresco_ghq $temp_dir/bin/ghq
+else
+    set -gx fresco_ghq (type --path ghq)
+end
+
+# NOTE: Install fresco
+set -l fresco_fish_path "$HOME/.config/fish/conf.d/fresco.fish"
+if set -q XDG_CONFIG_HOME
+    set fresco_fish_path "$XDG_CONFIG_HOME/fish/conf.d/fresco.fish"
+end
+eval $fresco_ghq get masa0x80/fresco
+set_color $fish_color_user
+echo "Create $fresco_fish_path"
+mkdir -p (dirname $fresco_fish_path)
+set_color normal
+
+# NOTE: Create bootstrap file
+if test $ghq_not_found = 1
+    # NOTE: Move ghq binary in fresco bin directory if ghq does not found
+    set -l fresco_base_path (eval $fresco_ghq root)/github.com/masa0x80/fresco
+    mkdir $fresco_base_path/bin
+    mv $fresco_ghq $fresco_base_path/bin
+    set -l fresco_file_path $fresco_base_path/fresco.fish
+    echo "set -l fresco_file $fresco_base_path/fresco.fish" > $fresco_fish_path
+    echo 'if test -r $fresco_file' >> $fresco_fish_path
+    echo "    set -l fresco_ghq $fresco_base_path/bin/ghq" >> $fresco_fish_path
+    echo '    source $fresco_file' >> $fresco_fish_path
+else
+    echo 'if type -qa ghq' > $fresco_fish_path
+    echo '    set -l fresco_file (ghq root)/github.com/masa0x80/fresco/fresco.fish' >> $fresco_fish_path
+    echo '    source $fresco_file' >> $fresco_fish_path
+end
+echo 'else'                    >> $fresco_fish_path
+echo '    curl https://raw.githubusercontent.com/masa0x80/fresco/master/install | fish'  >> $fresco_fish_path
+echo '    exec fish -l' >> $fresco_fish_path
+echo 'end'              >> $fresco_fish_path
