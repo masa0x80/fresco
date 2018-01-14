@@ -67,3 +67,5 @@ echo 'else'                    >> $fresco_fish_path
 echo '    curl https://raw.githubusercontent.com/masa0x80/fresco/master/install | fish'  >> $fresco_fish_path
 echo '    exec fish -l' >> $fresco_fish_path
 echo 'end'              >> $fresco_fish_path
+
+source $fresco_fish_path
