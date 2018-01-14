@@ -26,7 +26,10 @@ if not set -q fresco_log_color
     set -U fresco_log_color brown
 end
 if not set -q fresco_cache
-    set -U fresco_cache "$HOME/.cache/fresco/plugin_cache.fish"
+    set -U fresco_cache "$HOME/.local/share/fresco/plugin_cache.fish"
+    if set -q XDG_DATA_HOME
+        set fresco_cache "$XDG_DATA_HOME/fresco/plugin_cache.fish"
+    end
 end
 
 for file in (__fresco.ghq root)/github.com/masa0x80/fresco/{functions,completions}/*.fish
