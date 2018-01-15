@@ -15,7 +15,7 @@ function __fresco.update_plugin
             return 1
         case --self
             __fresco.git_update masa0x80/fresco
-            source (__fresco.ghq root)/github.com/masa0x80/fresco/fresco.fish
+            source $fresco_root/github.com/masa0x80/fresco/fresco.fish
             return 0
         case --all
             set plugins $fresco_plugins
