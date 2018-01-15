@@ -7,9 +7,9 @@ if not set -q fresco_root
     end
 end
 if not set -q fresco_plugin_list_path
-    set -U fresco_plugin_list_path "$HOME/.config/fish/plugins.fish"
-    if set -q XDG_CONFIG_HOME
-        set fresco_plugin_list_path "$XDG_CONFIG_HOME/fish/plugins.fish"
+    set -U fresco_plugin_list_path "$HOME/.local/share/fresco/plugins.fish"
+    if set -q XDG_DATA_HOME
+        set fresco_plugin_list_path "$XDG_DATA_HOME/fresco/plugins.fish"
     end
 end
 if not set -q fresco_plugins
