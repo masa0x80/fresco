@@ -1,19 +1,16 @@
-language: go
-go:
-  - tip
 sudo: required
 before_install:
   - sudo add-apt-repository -y ppa:fish-shell/release-2
   - sudo apt-get update
   - sudo apt-get -y install fish
 install:
-  - go get github.com/motemen/ghq
-  - export FRESCO_DIR=$(ghq root)/github.com/masa0x80/fresco
-  - mkdir -p $FRESCO_DIR
-  - mv * $FRESCO_DIR
-  - export FISH_CONF_DIR="$HOME/.config/fish/conf.d/"
-  - mkdir -p $FISH_CONF_DIR
-  - echo 'source (ghq root)/github.com/masa0x80/fresco/fresco.fish' > ${FISH_CONF_DIR}/fresco.fish
+  - export fresco_root="$HOME/.ghq"
+  - export fresco_dir=$fresco_root/github.com/masa0x80/fresco
+  - mkdir -p $fresco_dir
+  - mv * $fresco_dir
+  - export fish_conf_dir="$HOME/.config/fish/conf.d"
+  - mkdir -p $fish_conf_dir
+  - echo "source $fresco_dir/fresco.fish" > $fish_conf_dir/fresco.fish
 script:
   - fish -c 'fresco --version'
   - fish -c 'fresco help'

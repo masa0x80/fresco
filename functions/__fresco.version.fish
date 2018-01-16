@@ -1,3 +1,3 @@
 function __fresco.version
-    echo $FRESCO_VERSION
+    echo $fresco_version
 end

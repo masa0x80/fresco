@@ -1,3 +1,3 @@
 function __fresco.plugin_path -a plugin
-    echo (__fresco.ghq root)/github.com/$plugin
+    string join -- '/' $fresco_root (__fresco.plugin_url $plugin)
 end

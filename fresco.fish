@@ -1,22 +1,15 @@
-set -x FRESCO_VERSION 0.3.2
+set -x fresco_version 0.4.0
 
-function __fresco.ghq
-    if type -qa ghq
-        ghq $argv
-    else if test -x "$fresco_ghq"
-        eval $fresco_ghq $argv
-    else
-        set_color $fish_color_error
-        echo 'ERROR: `ghq` not found'
-        set_color normal
-        return 1
+if not set -q fresco_root
+    set -U fresco_root "$HOME/.local/share/fresco/repos"
+    if set -q XDG_DATA_HOME
+        set fresco_root "$XDG_DATA_HOME/fresco/repos"
     end
 end
-
 if not set -q fresco_plugin_list_path
-    set -U fresco_plugin_list_path "$HOME/.config/fish/plugins.fish"
-    if set -q XDG_CONFIG_HOME
-        set fresco_plugin_list_path "$XDG_CONFIG_HOME/fish/plugins.fish"
+    set -U fresco_plugin_list_path "$HOME/.local/share/fresco/plugins.fish"
+    if set -q XDG_DATA_HOME
+        set fresco_plugin_list_path "$XDG_DATA_HOME/fresco/plugins.fish"
     end
 end
 if not set -q fresco_plugins
@@ -32,7 +25,7 @@ if not set -q fresco_cache
     end
 end
 
-for file in (__fresco.ghq root)/github.com/masa0x80/fresco/{functions,completions}/*.fish
+for file in $fresco_root/github.com/masa0x80/fresco/{functions,completions}/*.fish
     source $file
 end
 
@@ -60,7 +53,7 @@ function fresco
 end
 
 function __fresco.bootstrap
-    __fresco.ghq >/dev/null
+    type -qa git
     if test $status != 0
         return 1
     end
