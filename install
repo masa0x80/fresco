@@ -31,7 +31,7 @@ mkdir -p (dirname $fresco_fish_path)
 set_color normal
 
 # NOTE: Create bootstrap file
-echo 'set -l bootstrap_file $fresco_base_path/fresco.fish'                 > $fresco_fish_path
+echo "set -l bootstrap_file $fresco_base_path/fresco.fish"                 > $fresco_fish_path
 echo 'if test -r $bootstrap_file'                                         >> $fresco_fish_path
 echo '    source $bootstrap_file'                                         >> $fresco_fish_path
 echo 'else'                                                               >> $fresco_fish_path
