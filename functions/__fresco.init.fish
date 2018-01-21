@@ -11,10 +11,7 @@ function __fresco.init
     end
 
     function __fresco.initial_clone_plugins --on-event fish_prompt
-        for plugin in (cat $fresco_plugin_list_path)
-            __fresco.clone_plugin $plugin
-        end
-
+        __fresco.get_plugins (cat $fresco_plugin_list_path)
         functions -e __fresco.initial_clone_plugins
     end
 

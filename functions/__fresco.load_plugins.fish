@@ -27,6 +27,7 @@ function __fresco.load_plugins
             end
         end
     end
+
     if not test -e $fresco_cache
         __fresco.cache_plugins
     end
