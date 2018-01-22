@@ -1,4 +1,4 @@
-set -x fresco_version 0.4.0
+set -x fresco_version 0.5.0
 
 if not set -q fresco_root
     set -U fresco_root "$HOME/.local/share/fresco/repos"
@@ -32,7 +32,7 @@ end
 function fresco
     switch "$argv[1]"
         case get
-            __fresco.get_plugin_async (string split -- $argv)
+            __fresco.get_plugins (string split -- $argv)
         case remove
             __fresco.remove_plugin (string split -- $argv)
         case update
@@ -48,7 +48,7 @@ function fresco
         case --version
             __fresco.version
         case \*
-            __fresco.get_plugin_async $argv
+            __fresco.get_plugins $argv
     end
 end
 

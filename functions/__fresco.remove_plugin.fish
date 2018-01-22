@@ -16,7 +16,7 @@ function __fresco.remove_plugin
 
     for plugin in $plugins
         if not contains -- $plugin $fresco_plugins
-            __fresco.log 'ERROR: invalid plugin name'
+            __fresco.log "ERROR: `$plugin` is invalid plugin name"
             continue
         end
 
