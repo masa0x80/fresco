@@ -24,7 +24,7 @@ function __fresco.update_plugin
     for plugin in $plugins
         if not contains -- $plugin $fresco_plugins
             or not test -e (__fresco.plugin_path $plugin)
-            __fresco.log 'ERROR: invalid plugin name'
+            __fresco.log "ERROR: `$plugin` is invalid plugin"
             continue
         end
 
