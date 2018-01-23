@@ -1,19 +1,11 @@
 function __fresco.load_plugins
-    function __fresco.reload_fresco_variable
-        if test (count $fresco_plugins) = 0
+    if test (count $fresco_plugins) = 0
+        if test "$fresco_plugins" != ''
             if test -r $fresco_plugin_list_path
-                for plugin in (cat $fresco_plugin_list_path)
-                    set plugin (string trim -- $plugin)
-                    if string match -q '' -- $plugin
-                        or string match -q -r '^#' -- $plugin
-                        continue
-                    end
-                    set fresco_plugins $fresco_plugins $plugin
-                end
+                __fresco.get_plugins (cat $fresco_plugin_list_path)
             end
         end
     end
-    __fresco.reload_fresco_variable
 
     function __fresco.cache_plugins
         command mkdir -p (dirname $fresco_cache)

@@ -58,7 +58,6 @@ function __fresco.bootstrap
         return 1
     end
     __fresco.init
-    __fresco.load_plugins
 
     functions -e __fresco.bootstrap
 end

@@ -38,5 +38,4 @@ function __fresco.clone_plugin -a plugin
         end
         return $git_status
     end
-
 end

@@ -2,7 +2,9 @@ function __fresco.get_plugins
     set -l fresco_job_pids
 
     for plugin in $argv
-        if test $plugin = ''
+        set plugin (string trim -- $plugin)
+        if test "$plugin" = ''
+            or string match -q -r '^#' -- $plugin
             continue
         end
 
