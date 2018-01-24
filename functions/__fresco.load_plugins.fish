@@ -1,9 +1,8 @@
 function __fresco.load_plugins
     if test (count $fresco_plugins) = 0
-        if test "$fresco_plugins" != ''
-            if test -r $fresco_plugin_list_path
-                __fresco.get_plugins (cat $fresco_plugin_list_path)
-            end
+        and test (string trim -- "$fresco_plugins") != ''
+        if test -r $fresco_plugin_list_path
+            __fresco.get_plugins (cat $fresco_plugin_list_path)
         end
     end
 
