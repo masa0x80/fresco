@@ -1,4 +1,17 @@
 function __fresco.load_plugins
+    function __fresco.cache_plugins
+        command mkdir -p (dirname $fresco_cache)
+        echo -n >$fresco_cache
+        for plugin in $fresco_plugins
+            for file in (__fresco.plugin_path $plugin)/{functions/,conf.d/,completions/,}*.fish
+                if string match -q -- 'uninstall.fish' (basename $file)
+                    continue
+                end
+                command cat $file >>$fresco_cache
+            end
+        end
+    end
+
     if test (count $fresco_plugins) = 0
         and test (string trim -- "$fresco_plugins") != ''
         if test -r $fresco_plugin_list_path
@@ -9,19 +22,6 @@ function __fresco.load_plugins
                     continue
                 end
                 set fresco_plugins $fresco_plugins $plugin
-            end
-        end
-    end
-
-    function __fresco.cache_plugins
-        command mkdir -p (dirname $fresco_cache)
-        echo -n >$fresco_cache
-        for plugin in $fresco_plugins
-            for file in (__fresco.plugin_path $plugin)/{functions/,conf.d/,completions/,}*.fish
-                if string match -q -- 'uninstall.fish' (basename $file)
-                    continue
-                end
-                command cat $file >>$fresco_cache
             end
         end
     end
