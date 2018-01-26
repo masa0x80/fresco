@@ -15,9 +15,5 @@ function __fresco.init
         functions -e __fresco.initial_clone_plugins
     end
 
-    if test -r $fresco_cache
-        source $fresco_cache
-    end
-
     functions -e __fresco.init
 end

@@ -2,7 +2,14 @@ function __fresco.load_plugins
     if test (count $fresco_plugins) = 0
         and test (string trim -- "$fresco_plugins") != ''
         if test -r $fresco_plugin_list_path
-            __fresco.get_plugins (cat $fresco_plugin_list_path)
+            for plugin in (cat $fresco_plugin_list_path)
+                set plugin (string trim -- $plugin)
+                if string match -q '' -- $plugin
+                    or string match -q -r '^#' -- $plugin
+                    continue
+                end
+                set fresco_plugins $fresco_plugins $plugin
+            end
         end
     end
 
