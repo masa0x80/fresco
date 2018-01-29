@@ -35,7 +35,7 @@ function __fresco_remove_plugin
 
         if command grep "^$plugin" $fresco_plugin_list_path >/dev/null
             string replace '/' '\\/' -- $plugin | read -l escaped_plugin
-            set -l fresco_tmp_file /tmp/fresco-(random)
+            set -l fresco_tmp_file (mktemp)
             command sed -e "/^$escaped_plugin\$/d" -- $fresco_plugin_list_path >$fresco_tmp_file
             command mv $fresco_tmp_file $fresco_plugin_list_path
             __fresco_log 'Disable ' $plugin
