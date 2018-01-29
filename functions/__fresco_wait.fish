@@ -1,4 +1,4 @@
-function __fresco.wait
+function __fresco_wait
     if test (count $argv) != 0
         while true
             set -l remain 0

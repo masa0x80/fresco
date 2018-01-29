@@ -1,8 +1,8 @@
-function __fresco.update_plugin
+function __fresco_update_plugin
     function __fresco.git_update -a plugin
-        __fresco.log "Update " $plugin
+        __fresco_log "Update " $plugin
         pushd (pwd)
-        builtin cd (__fresco.plugin_path $plugin)
+        builtin cd (__fresco_plugin_path $plugin)
         command git pull origin master ^/dev/null
         popd
     end
@@ -11,7 +11,7 @@ function __fresco.update_plugin
 
     switch "$argv[1]"
         case ''
-            __fresco.log 'ERROR: specify at least one plugin name'
+            __fresco_log 'ERROR: specify at least one plugin name'
             return 1
         case --self
             __fresco.git_update masa0x80/fresco
@@ -23,13 +23,13 @@ function __fresco.update_plugin
 
     for plugin in $plugins
         if not contains -- $plugin $fresco_plugins
-            or not test -e (__fresco.plugin_path $plugin)
-            __fresco.log "ERROR: `$plugin` is invalid plugin"
+            or not test -e (__fresco_plugin_path $plugin)
+            __fresco_log "ERROR: `$plugin` is invalid plugin"
             continue
         end
 
-        __fresco.git_update $plugin
+        __fresco_git_update $plugin
     end
 
-    __fresco.reload_plugins
+    __fresco_reload_plugins
 end

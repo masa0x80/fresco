@@ -1,4 +1,4 @@
-function __fresco.get_plugins
+function __fresco_get_plugins
     set -l fresco_job_pids
 
     for plugin in $argv
@@ -9,19 +9,19 @@ function __fresco.get_plugins
         end
 
         if string match -qr -- '^\-.*' $plugin
-            __fresco.log 'ERROR: `' $plugin '` is an invalid argument.'
+            __fresco_log 'ERROR: `' $plugin '` is an invalid argument.'
             continue
         end
 
         if not contains -- $plugin $fresco_plugins
-            fish -c "__fresco.get_plugin $plugin" &
+            fish -c "__fresco_get_plugin $plugin" &
             set fresco_job_pids $fresco_job_pids (jobs -p -l)
         end
     end
 
     if test (count $fresco_job_pids) != 0
-        if __fresco.wait $fresco_job_pids
-            __fresco.reload_plugins
+        if __fresco_wait $fresco_job_pids
+            __fresco_reload_plugins
         end
     end
 end

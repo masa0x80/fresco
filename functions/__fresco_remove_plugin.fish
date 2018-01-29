@@ -1,9 +1,9 @@
-function __fresco.remove_plugin
+function __fresco_remove_plugin
     set -l force_option false
 
     switch "$argv[1]"
         case ''
-            __fresco.log 'ERROR: specify at least one plugin name'
+            __fresco_log 'ERROR: specify at least one plugin name'
             return 1
         case -f --force
             set force_option true
@@ -16,20 +16,20 @@ function __fresco.remove_plugin
 
     for plugin in $plugins
         if not contains -- $plugin $fresco_plugins
-            __fresco.log "ERROR: `$plugin` is invalid plugin name"
+            __fresco_log "ERROR: `$plugin` is invalid plugin name"
             continue
         end
 
-        for uninstall_fish in (__fresco.plugin_path $plugin)/{functions/,}uninstall.fish
+        for uninstall_fish in (__fresco_plugin_path $plugin)/{functions/,}uninstall.fish
             if test -f $uninstall_fish
                 builtin source $uninstall_fish
             end
         end
 
         if eval $force_option
-            if test -e (__fresco.plugin_path $plugin)
-                command rm -rf (__fresco.plugin_path $plugin)
-                __fresco.log 'Remove ' (__fresco.plugin_path $plugin)
+            if test -e (__fresco_plugin_path $plugin)
+                command rm -rf (__fresco_plugin_path $plugin)
+                __fresco_log 'Remove ' (__fresco_plugin_path $plugin)
             end
         end
 
@@ -38,9 +38,9 @@ function __fresco.remove_plugin
             set -l fresco_tmp_file /tmp/fresco-(random)
             command sed -e "/^$escaped_plugin\$/d" -- $fresco_plugin_list_path >$fresco_tmp_file
             command mv $fresco_tmp_file $fresco_plugin_list_path
-            __fresco.log 'Disable ' $plugin
+            __fresco_log 'Disable ' $plugin
         end
     end
 
-    __fresco.reload_plugins
+    __fresco_reload_plugins
 end
