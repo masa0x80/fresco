@@ -21,21 +21,33 @@ function __fresco_clone_plugin -a plugin
     end
 
     if not test -e (__fresco_plugin_path $plugin)
-        __fresco_log 'Download ' (__fresco_plugin_path $plugin)
-        set -l url (string join -- '//' https: (__fresco_plugin_url $plugin))
-        git clone $url (__fresco_plugin_path $plugin) >/dev/null ^/dev/null
+        set -l url (echo -s git:// (__fresco_plugin_url $plugin))
+
+        # Check repository existence
+        # Requirements: `git` version 1.7.6 or higher
+        git ls-remote --exit-code $url >/dev/null ^/dev/null
         set -l git_status $status
         if test $git_status != 0
-            command rm -rf (__fresco_plugin_path $plugin)
             __fresco_log "ERROR: `$plugin` is invalid plugin name"
-        else
+            return $git_status
+        end
+
+        # Clone repository
+        set -l plugin_path (__fresco_plugin_path $plugin)
+        __fresco_log "Download $plugin_path"
+        git clone $url $plugin_path >/dev/null ^/dev/null
+        set git_status $status
+        if test $git_status = 0
             __fresco.resolve_dependency $plugin
             __fresco.append_plugin_to_list $plugin
             __fresco_log "Enable $plugin"
             if not contains -- $plugin $fresco_plugins
                 set fresco_plugins $fresco_plugins $plugin
             end
+        else
+            command rm -rf $plugin_path
+            __fresco_log "ERROR: `$plugin` is invalid plugin name"
+            return $git_status
         end
-        return $git_status
     end
 end
