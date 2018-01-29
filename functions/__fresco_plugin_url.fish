@@ -1,8 +1,8 @@
 function __fresco_plugin_url -a plugin
-    set -l vcs github.com
+    set -l vcs git@github.com
     if string match -q -r -- '.*/.*' $plugin
-        string join -- '/' $vcs $plugin
+        echo -s $vcs : $plugin
     else
-        string join -- '/' $vcs $plugin $plugin
+        echo -s $vcs : $plugin / $plugin
     end
 end
