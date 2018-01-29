@@ -21,7 +21,7 @@ function __fresco_clone_plugin -a plugin
     end
 
     if not test -e (__fresco_plugin_path $plugin)
-        set -l url (__fresco_plugin_url $plugin)
+        set -l url (echo -s git:// (__fresco_plugin_url $plugin))
 
         # Check repository existence
         # Requirements: `git` version 1.7.6 or higher
