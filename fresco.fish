@@ -32,23 +32,23 @@ end
 function fresco
     switch "$argv[1]"
         case get
-            __fresco.get_plugins (string split -- $argv)
+            __fresco_get_plugins (string split -- $argv)
         case remove
-            __fresco.remove_plugin (string split -- $argv)
+            __fresco_remove_plugin (string split -- $argv)
         case update
-            __fresco.update_plugin (string split -- $argv)
+            __fresco_update_plugin (string split -- $argv)
         case list
-            __fresco.list
+            __fresco_list
         case reload
-            __fresco.reload_plugins
-            __fresco.log 'Reloaded plugins:'
-            __fresco.list ' * '
+            __fresco_reload_plugins
+            __fresco_log 'Reloaded plugins:'
+            __fresco_list ' * '
         case help ''
-            __fresco.help
+            __fresco_help
         case --version
-            __fresco.version
+            __fresco_version
         case \*
-            __fresco.get_plugins $argv
+            __fresco_get_plugins $argv
     end
 end
 
@@ -57,8 +57,8 @@ function __fresco.bootstrap
     if test $status != 0
         return 1
     end
-    __fresco.init
-    __fresco.load_plugins
+    __fresco_init
+    __fresco_load_plugins
 
     functions -e __fresco.bootstrap
 end

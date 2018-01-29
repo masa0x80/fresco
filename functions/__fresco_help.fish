@@ -1,4 +1,4 @@
-function __fresco.help
+function __fresco_help
     echo 'fresco [repos]        -- install plugins'
     echo 'fresco remove [repos] -- remove plugins'
     echo 'fresco update [repos] -- update plugins'
