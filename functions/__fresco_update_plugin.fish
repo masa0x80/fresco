@@ -28,7 +28,7 @@ function __fresco_update_plugin
             continue
         end
 
-        __fresco_git_update $plugin
+        __fresco.git_update $plugin
     end
 
     __fresco_reload_plugins
