@@ -49,5 +49,11 @@ function __fresco_clone_plugin -a plugin
             __fresco_log "ERROR: `$plugin` is invalid plugin name"
             return $git_status
         end
+    else
+        if not contains -- $plugin $fresco_plugins
+            __fresco_log "Enable $plugin"
+            __fresco.append_plugin_to_list $plugin
+            set fresco_plugins $fresco_plugins $plugin
+        end
     end
 end
