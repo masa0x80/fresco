@@ -1,4 +1,4 @@
-set -x fresco_version 0.5.0
+set -x fresco_version 0.5.1
 
 if not set -q fresco_root
     set -U fresco_root "$HOME/.local/share/fresco/repos"

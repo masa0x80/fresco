@@ -14,7 +14,7 @@ function __fresco_get_plugins
         end
 
         if not contains -- $plugin $fresco_plugins
-            fish -c "__fresco_get_plugin $plugin" &
+            fish -c "__fresco_clone_plugin $plugin" &
             set fresco_job_pids $fresco_job_pids (jobs -p -l)
         end
     end
