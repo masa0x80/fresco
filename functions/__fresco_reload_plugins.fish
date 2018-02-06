@@ -3,10 +3,10 @@ function __fresco_reload_plugins
         set fresco_plugins
 
         for plugin in (cat $fresco_plugin_list_path)
-            set fresco_plugins $fresco_plugins $plugin
-            if not test -d (__fresco_plugin_path $plugin)
-                set fresco_plugins
-                break
+            if test -d (__fresco_plugin_path $plugin)
+                if not contains $fresco_plugins $plugin
+                    set fresco_plugins $fresco_plugins $plugin
+                end
             end
         end
 
