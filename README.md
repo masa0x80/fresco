@@ -13,6 +13,22 @@ $ curl https://raw.githubusercontent.com/masa0x80/fresco/master/install | fish
 $ exec fish -l
 ```
 
+**Tips: For you who use `ghq` to manage git repository**
+
+`fresco` clones repositories under the directory specified by `fresco_root` shell variable.
+`fresco_root` default value is `~/.local/share/fresco/repos/`.
+
+If you want to integrate and manage plugins installed with `fresco` and `ghq`,
+you should set `fresco_root` shell variable to `(ghq root)`.
+
+```
+set -U fresco_root (ghq root)
+```
+
+### Requirements
+
+- git: version 1.7.6 or higher
+
 ## Usage
 
 ```
@@ -20,39 +36,42 @@ fresco [repos]        -- install plugins
 fresco remove [repos] -- remove plugins
 fresco update [repos] -- update plugins
 fresco list           -- list installed plugins
-fresco reload         -- reload plugins based on `$HOME/.config/fish/plugins.fish` file
+fresco reload         -- reload plugins based on `$fresco_plugin_list_path` file
 fresco help           -- display the help message
 fresco --version      -- display the version of fresco
 ```
 
 **Example: install a plugin**
 
-To install `mono`, execute the following command:
+To install `fisherman/simple`, execute the following command:
 
 ```
-$ fresco fisherman/mono
+$ fresco fisherman/simple
 ```
+
+After install a plugin, create `$fresco_cache` file which is used to load plugins when fish start at next time.
+To recreate the cache file, execute `freaco reload`.
 
 **Example: update a plugin**
 
-To update `mono`, execute the following command:
+To update `fisherman/simple`, execute the following command:
 
 ```
-$ fresco update fisherman/mono
+$ fresco update fisherman/simple
 ```
 
 **Example: remove a plugin**
 
-Make `mono` disable, execute the following command:
+Make `fisherman/simple` disable, execute the following command:
 
 ```
-$ fresco remove fisherman/mono
+$ fresco remove fisherman/simple
 ```
 
-Make `mono` disable and remove `mono` repository, execute the following command:
+Make `fisherman/simple` disable and remove `fisherman/simple` repository, execute the following command:
 
 ```
-$ fresco remove --force fisherman/mono
+$ fresco remove --force fisherman/simple
 ```
 
 **Update `fresco`**
