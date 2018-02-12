@@ -43,10 +43,10 @@ fresco --version      -- display the version of fresco
 
 **Example: install a plugin**
 
-To install `mono`, execute the following command:
+To install `fisherman/simple`, execute the following command:
 
 ```
-$ fresco fisherman/mono
+$ fresco fisherman/simple
 ```
 
 After install a plugin, create `$fresco_cache` file which is used to load plugins when fish start at next time.
@@ -54,24 +54,24 @@ To recreate the cache file, execute `freaco reload`.
 
 **Example: update a plugin**
 
-To update `mono`, execute the following command:
+To update `fisherman/simple`, execute the following command:
 
 ```
-$ fresco update fisherman/mono
+$ fresco update fisherman/simple
 ```
 
 **Example: remove a plugin**
 
-Make `mono` disable, execute the following command:
+Make `fisherman/simple` disable, execute the following command:
 
 ```
-$ fresco remove fisherman/mono
+$ fresco remove fisherman/simple
 ```
 
-Make `mono` disable and remove `mono` repository, execute the following command:
+Make `fisherman/simple` disable and remove `fisherman/simple` repository, execute the following command:
 
 ```
-$ fresco remove --force fisherman/mono
+$ fresco remove --force fisherman/simple
 ```
 
 **Update `fresco`**

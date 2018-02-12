@@ -43,10 +43,10 @@ fresco --version      -- frescoのバージョンを表示します
 
 **例：プラグインのインストール**
 
-`mono` をインストールするには下記コマンドを実行してください。
+`fisherman/simple` をインストールするには下記コマンドを実行してください。
 
 ```
-$ fresco fisherman/mono
+$ fresco fisherman/simple
 ```
 
 プラグインをインストールすると、`$fresco_cache` ファイルが作成されます。
@@ -56,25 +56,25 @@ $ fresco fisherman/mono
 
 **例：プラグインの更新**
 
-`mono` を更新するには下記コマンドを実行してください。
+`fisherman/simple` を更新するには下記コマンドを実行してください。
 
 ```
-$ fresco update fisherman/mono
+$ fresco update fisherman/simple
 ```
 
 **例：プラグインの削除**
 
-`mono` を無効化するには下記コマンドを実行してください。
+`fisherman/simple` を無効化するには下記コマンドを実行してください。
 この場合、リポジトリー自体は削除されません。
 
 ```
-$ fresco remove fisherman/mono
+$ fresco remove fisherman/simple
 ```
 
 無効化した上でリポジトリーを削除する場合は、下記コマンドを実行してください。
 
 ```
-$ fresco remove --force fisherman/mono
+$ fresco remove --force fisherman/simple
 ```
 
 **`fresco` 自体を更新する場合**
