@@ -1,7 +1,7 @@
 sudo: required
 cache: apt
 before_install:
-  - sudo add-apt-repository -y ppa:fish-shell/release-2
+  - sudo add-apt-repository -y ppa:fish-shell/release-3
   - sudo apt-get update
   - sudo apt-get -y install fish
 install:
@@ -17,18 +17,13 @@ script:
   - fish -c 'fresco help'
   - fish -c 'fresco oh-my-fish/plugin-osx'
   - fish -c 'type -qa itunes'
-  - fish -c 'fresco fisherman/simple'
-  - fish -c 'fresco update fisherman/simple'
-  - fish -c 'fresco list | grep fisherman/git_util >/dev/null'
-  - fish -c 'fresco list | grep fisherman/pwd_is_home >/dev/null'
-  - fish -c 'fresco list | grep fisherman/pwd_info >/dev/null'
-  - fish -c 'fresco list | grep fisherman/host_info >/dev/null'
-  - fish -c 'fresco list | grep fisherman/last_job_id >/dev/null'
-  - fish -c 'fresco list | grep fisherman/humanize_duration >/dev/null'
-  - fish -c 'fresco list | grep fisherman/simple >/dev/null'
+  - fish -c 'fresco masa0x80/filtering_history_keybind.fish'
+  - fish -c 'fresco update masa0x80/filtering_history_keybind.fish'
+  - fish -c 'fresco list | grep masa0x80/angler.fish >/dev/null'
+  - fish -c 'fresco list | grep masa0x80/filtering_history_keybind.fish >/dev/null'
   - fish -c 'fresco reload'
-  - fish -c 'fresco remove fisherman/simple'
-  - fish -c 'fresco list | grep fisherman/simple; or true'
+  - fish -c 'fresco remove masa0x80/filtering_history_keybind.fish'
+  - fish -c 'fresco list | grep masa0x80/filtering_history_keybind.fish || true'
   - fish -c 'fresco get -abc -xyz'
-  - fish -c 'fresco list | grep \\-abc; or true'
-  - fish -c 'fresco list | grep \\-xyz; or true'
+  - fish -c 'fresco list | grep \\-abc || true'
+  - fish -c 'fresco list | grep \\-xyz || true'

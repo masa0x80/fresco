@@ -19,9 +19,5 @@ function __fresco_get_plugins
         end
     end
 
-    if test (count $fresco_job_pids) != 0
-        if __fresco_wait $fresco_job_pids
-            __fresco_reload_plugins
-        end
-    end
+    wait $fresco_job_pids && __fresco_reload_plugins
 end

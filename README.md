@@ -28,6 +28,7 @@ set -U fresco_root (ghq root)
 ### Requirements
 
 - git: version 1.7.6 or higher
+- fish: version 3.0.0 or higher
 
 ## Usage
 
@@ -43,10 +44,10 @@ fresco --version      -- display the version of fresco
 
 **Example: install a plugin**
 
-To install `fisherman/simple`, execute the following command:
+To install `masa0x80/angler.fish`, execute the following command:
 
 ```
-$ fresco fisherman/simple
+$ fresco masa0x80/angler.fish
 ```
 
 After install a plugin, create `$fresco_cache` file which is used to load plugins when fish start at next time.
@@ -54,24 +55,24 @@ To recreate the cache file, execute `freaco reload`.
 
 **Example: update a plugin**
 
-To update `fisherman/simple`, execute the following command:
+To update `masa0x80/angler.fish`, execute the following command:
 
 ```
-$ fresco update fisherman/simple
+$ fresco update masa0x80/angler.fish
 ```
 
 **Example: remove a plugin**
 
-Make `fisherman/simple` disable, execute the following command:
+Make `masa0x80/angler.fish` disable, execute the following command:
 
 ```
-$ fresco remove fisherman/simple
+$ fresco remove masa0x80/angler.fish
 ```
 
-Make `fisherman/simple` disable and remove `fisherman/simple` repository, execute the following command:
+Make `masa0x80/angler.fish` disable and remove `masa0x80/angler.fish` repository, execute the following command:
 
 ```
-$ fresco remove --force fisherman/simple
+$ fresco remove --force masa0x80/angler.fish
 ```
 
 **Update `fresco`**
