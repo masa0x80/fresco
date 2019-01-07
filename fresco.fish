@@ -1,4 +1,4 @@
-set -x fresco_version 0.5.3
+set -x fresco_version 0.5.4
 
 if not set -q fresco_root
     set -U fresco_root "$HOME/.local/share/fresco/repos"
@@ -62,4 +62,4 @@ function __fresco.bootstrap
 
     functions -e __fresco.bootstrap
 end
-__fresco.bootstrap
+status --is-interactive && __fresco.bootstrap
