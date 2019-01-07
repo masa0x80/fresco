@@ -2,27 +2,17 @@ set -x fresco_version 0.5.4
 
 if not set -q fresco_root
     set -U fresco_root "$HOME/.local/share/fresco/repos"
-    if set -q XDG_DATA_HOME
-        set fresco_root "$XDG_DATA_HOME/fresco/repos"
-    end
+    set -q XDG_DATA_HOME && set fresco_root "$XDG_DATA_HOME/fresco/repos"
 end
 if not set -q fresco_plugin_list_path
     set -U fresco_plugin_list_path "$HOME/.local/share/fresco/plugins.fish"
-    if set -q XDG_DATA_HOME
-        set fresco_plugin_list_path "$XDG_DATA_HOME/fresco/plugins.fish"
-    end
+    set -q XDG_DATA_HOME && set fresco_plugin_list_path "$XDG_DATA_HOME/fresco/plugins.fish"
 end
-if not set -q fresco_plugins
-    set -U fresco_plugins
-end
-if not set -q fresco_log_color
-    set -U fresco_log_color brown
-end
+not set -q fresco_plugins && set -U fresco_plugins
+not set -q fresco_log_color && set -U fresco_log_color brown
 if not set -q fresco_cache
     set -U fresco_cache "$HOME/.local/share/fresco/plugin_cache.fish"
-    if set -q XDG_DATA_HOME
-        set fresco_cache "$XDG_DATA_HOME/fresco/plugin_cache.fish"
-    end
+    set -q XDG_DATA_HOME && set fresco_cache "$XDG_DATA_HOME/fresco/plugin_cache.fish"
 end
 
 for file in $fresco_root/github.com/masa0x80/fresco/{functions,completions}/*.fish
@@ -52,7 +42,7 @@ function fresco
     end
 end
 
-function __fresco.bootstrap
+function __fresco.bootstrap --on-event fresco_bootstrap
     type -qa git
     if test $status != 0
         return 1
@@ -62,4 +52,4 @@ function __fresco.bootstrap
 
     functions -e __fresco.bootstrap
 end
-status --is-interactive && __fresco.bootstrap
+emit fresco_bootstrap
