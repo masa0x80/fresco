@@ -11,7 +11,7 @@ function __fresco_clone_plugin -a plugin
             end
         end
 
-        __fresco_wait $fresco_job_pids
+        wait $fresco_job_pids
     end
 
     function __fresco.append_plugin_to_list -a plugin
