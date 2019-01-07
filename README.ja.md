@@ -28,6 +28,7 @@ set -U fresco_root (ghq root)
 ### 必要要件
 
 - git: 1.7.6より新しいバージョンが必要です。
+- fish: 3.0.0より新しいバージョンが必要です。
 
 ## 使い方
 
@@ -43,10 +44,10 @@ fresco --version      -- frescoのバージョンを表示します
 
 **例：プラグインのインストール**
 
-`fisherman/simple` をインストールするには下記コマンドを実行してください。
+`masa0x80/angler.fish` をインストールするには下記コマンドを実行してください。
 
 ```
-$ fresco fisherman/simple
+$ fresco masa0x80/angler.fish
 ```
 
 プラグインをインストールすると、`$fresco_cache` ファイルが作成されます。
@@ -56,25 +57,25 @@ $ fresco fisherman/simple
 
 **例：プラグインの更新**
 
-`fisherman/simple` を更新するには下記コマンドを実行してください。
+`masa0x80/angler.fish` を更新するには下記コマンドを実行してください。
 
 ```
-$ fresco update fisherman/simple
+$ fresco update masa0x80/angler.fish
 ```
 
 **例：プラグインの削除**
 
-`fisherman/simple` を無効化するには下記コマンドを実行してください。
+`masa0x80/angler.fish` を無効化するには下記コマンドを実行してください。
 この場合、リポジトリー自体は削除されません。
 
 ```
-$ fresco remove fisherman/simple
+$ fresco remove masa0x80/angler.fish
 ```
 
 無効化した上でリポジトリーを削除する場合は、下記コマンドを実行してください。
 
 ```
-$ fresco remove --force fisherman/simple
+$ fresco remove --force masa0x80/angler.fish
 ```
 
 **`fresco` 自体を更新する場合**
