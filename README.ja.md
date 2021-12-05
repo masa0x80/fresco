@@ -4,12 +4,12 @@
 
 ## 概要
 
-Fish-shell向けのシンプルなプラグインマネージャーが `fresco` です。
+`fresco` はFish-shell向けのシンプルなプラグインマネージャーです。
 
 ## 導入方法
 
 ```
-$ curl https://raw.githubusercontent.com/masa0x80/fresco/master/install | fish
+$ curl https://raw.githubusercontent.com/masa0x80/fresco/main/install | fish
 $ exec fish -l
 ```
 
@@ -28,7 +28,7 @@ set -U fresco_root (ghq root)
 ### 必要要件
 
 - git: 1.7.6より新しいバージョンが必要です。
-- fish: 3.0.0より新しいバージョンが必要です。
+- fish: 3.3.0より新しいバージョンが必要です。
 
 ## 使い方
 
