@@ -9,7 +9,7 @@
 ## Installation
 
 ```
-$ curl https://raw.githubusercontent.com/masa0x80/fresco/master/install | fish
+$ curl https://raw.githubusercontent.com/masa0x80/fresco/main/install | fish
 $ exec fish -l
 ```
 
@@ -28,7 +28,7 @@ set -U fresco_root (ghq root)
 ### Requirements
 
 - git: version 1.7.6 or higher
-- fish: version 3.0.0 or higher
+- fish: version 3.3.0 or higher
 
 ## Usage
 
